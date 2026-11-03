@@ -1,4 +1,4 @@
-# SQL Injection – Authentication Bypass (No Native Build Required)
+# SQL Injection – Authentication Bypass
 
 This project contains only SQL Injection Authentication Bypass (Variant 1). UNION-based SQL injection is not included.
 
