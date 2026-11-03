@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UNION-Based SQL Injection Lab</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top">
+  <h1>SQL Injection Demonstration</h1>
+  <p>Variant 2 · UNION-Based Data Extraction · Local training application</p>
+  <div class="modes">
+    <form method="post" action="/">
+      <input type="hidden" name="mode" value="vulnerable">
+      <button class="mode-btn red <%= mode === 'vulnerable' ? 'active' : '' %>">Vulnerable Mode</button>
+    </form>
+    <form method="post" action="/">
+      <input type="hidden" name="mode" value="secure">
+      <button class="mode-btn green <%= mode === 'secure' ? 'active' : '' %>">Secure Mode</button>
+    </form>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="panel">
+    <h2>Product Search</h2>
+    <div class="notice <%= mode === 'vulnerable' ? 'danger' : 'safe' %>">
+      Current mode: <strong><%= mode.toUpperCase() %></strong>
+      <% if (mode === 'vulnerable') { %> — user input is concatenated into SQL
+      <% } else { %> — parameterized query is enabled<% } %>
+    </div>
+    <form method="post" action="/">
+      <input type="hidden" name="mode" value="<%= mode %>">
+      <input type="hidden" name="action" value="search">
+      <label for="search">Search product name:</label>
+      <input id="search" name="search" value="<%= queryText %>" placeholder="e.g. Keyboard" autocomplete="off">
+      <div class="buttons">
+        <button class="primary" type="submit">Search</button>
+        <button class="secondary" type="button" onclick="document.getElementById('search').value='';">Clear</button>
+      </div>
+    </form>
+
+    <h3>Demo UNION payload</h3>
+    <p class="muted">Use this only against this local lab app. It combines product rows with fictional user rows.</p>
+    <div class="payload" onclick="document.getElementById('search').value=this.innerText" title="Click to copy into search field">
+      ' UNION SELECT id, username, password FROM users --
+    </div>
+    <p class="hint">Click the payload, then press Search. Try it first in Vulnerable Mode and then repeat in Secure Mode.</p>
+
+    <% if (attackStatus) { %>
+      <div class="result-message <%= (mode === 'vulnerable' && queryText.toUpperCase().includes('UNION')) ? 'danger' : 'safe' %>">
+        <%= attackStatus %>
+      </div>
+    <% } %>
+  </section>
+
+  <section class="panel">
+    <h2>Query Results</h2>
+    <% if (results && results.length) { %>
+    <div class="table-wrap"><table>
+      <thead><tr><th>ID</th><th>Name</th><th>Price / Extracted value</th></tr></thead>
+      <tbody>
+      <% results.forEach(function(row) { %>
+        <tr><td><%= row.id %></td><td><%= row.name %></td><td><%= row.price %></td></tr>
+      <% }); %>
+      </tbody>
+    </table></div>
+    <% } else { %>
+      <div class="empty">No results to display. Search for a product or run the demonstration payload.</div>
+    <% } %>
+  </section>
+
+  <section class="panel wide">
+    <h2>Generated SQL Command</h2>
+    <pre><%= sqlDisplay ? sqlDisplay : 'Your SQL query will appear here after you search.' %></pre>
+    <h2>Database Records (normal products)</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>ID</th><th>Product</th><th>Price (₹)</th></tr></thead>
+      <tbody>
+      <% history.forEach(function(row) { %>
+        <tr><td><%= row.id %></td><td><%= row.name %></td><td><%= row.price %></td></tr>
+      <% }); %>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="panel wide">
+    <h2>What this demonstration proves</h2>
+    <ul>
+      <li><strong>Vulnerable:</strong> input is joined directly into the SQL statement, allowing a UNION clause to append rows from the users table.</li>
+      <li><strong>Secure:</strong> a parameterized query sends the search text separately from SQL syntax, so the payload is treated as literal text.</li>
+      <li><strong>Impact:</strong> data from a different table can be exposed if an application builds SQL unsafely.</li>
+    </ul>
+    <p class="small">All records and credentials in this project are fictional demonstration data. The server binds to 127.0.0.1 only.</p>
+  </section>
+</main>
+<footer>Cyber Security Lab · SQL Injection Variant 2</footer>
+</body>
+</html>

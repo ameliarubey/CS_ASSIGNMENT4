@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Injection - Authentication Bypass</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="page">
+    <header class="top">
+      <p class="eyebrow">WEB SERVER SECURITY • LOCAL LAB</p>
+      <h1>SQL Injection</h1>
+      <p class="subtitle">Authentication Bypass Demonstration</p>
+    </header>
+    <section class="notice">
+      <strong>Assignment variant:</strong> Authentication Bypass (Variant 1)
+      <span>UNION-based SQL injection is not included.</span>
+    </section>
+    <section class="panel">
+      <div class="panel-heading">
+        <div><p class="eyebrow">LOGIN TEST</p><h2>Test the login form</h2></div>
+        <span class="status-pill" id="version-label">VERSION</span>
+      </div>
+      <form id="login-form">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" placeholder="Enter username" required>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Enter password" required>
+        <div class="actions">
+          <button class="button secondary" type="button" id="fill-payload">Fill demo payload</button>
+          <button class="button primary" type="submit">Test login</button>
+        </div>
+      </form>
+      <div class="payload-note">
+        <strong>Demo payload:</strong> <code>admin' --</code>
+        <p>Click “Fill demo payload”, enter any password, and test the login.</p>
+      </div>
+      <div id="result" class="result" role="status" aria-live="polite">Result will appear here after you test the login.</div>
+    </section>
+    <section class="info-grid">
+      <article class="info-card"><h3>What is happening?</h3><p id="explanation"></p></article>
+      <article class="info-card"><h3>Code to inspect</h3><p id="code-location"></p></article>
+    </section>
+    <footer>Educational use only • Run this application on your own computer.</footer>
+  </main>
+</body>
+</html>

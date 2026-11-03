@@ -1,0 +1,14 @@
+{
+  "name": "sql-injection-authentication-bypass-lab",
+  "version": "1.0.1",
+  "description": "Local educational demo of SQL injection authentication bypass and parameterized-query mitigation",
+  "main": "Without_Mitigation/server.js",
+  "scripts": {
+    "start:vulnerable": "node Without_Mitigation/server.js",
+    "start:secure": "node With_Mitigation/server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "sql.js": "^1.13.0"
+  }
+}

